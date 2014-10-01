@@ -1,0 +1,20 @@
+##
+# Demo Ansible playbook for installing and configuring NTP
+#
+---
+- hosts: all
+  name: install, configure and start NTP
+  user: ubuntu
+  sudo: yes
+  tasks:
+    # Ensure the ntp package is installed
+    - name: Ensure the ntp package is installed      
+      action: apt update_cache=yes pkg=ntp state=installed
+
+    # all servers need to point to common ubuntu providers.
+    - name: copy over our local ntp.conf
+      action: copy src=files/etc-ntp.conf dest=/etc/ntp.conf mode=755
+    # Restart ntp to apply new ntp.conf
+    - name: Restart ntp to apply new ntp.conf
+      action: service name=ntp state=restarted
+
